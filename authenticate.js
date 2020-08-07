@@ -18,6 +18,8 @@ exports.getToken = function (user) {
         { expiresIn: 3600 });
 };
 
+
+
 var opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = config.secretKey;
@@ -38,4 +40,18 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts,
         });
     }));
 
+
+/// task 03
+
+exports.verifyAdmin = function (req, res, next) {
+    if (req.user.admin) {
+        return next();
+    } else {
+        err = new Error('You are not authorized to perform this operation.');
+        err.statusCode = 403;
+    }
+};
+
+
 exports.verifyUser = passport.authenticate('jwt', { session: false });
+
